@@ -1,0 +1,89 @@
+# Filmes -----------------------------------------------------------
+
+###
+POST https://localhost:5001/api/filme/create
+Content-Type: application/json
+
+{
+  "Titulo": "A pequena sereia",
+  "Duracao": 60,
+  "Diretor": "Walt Disney",
+  "Genero": "Animação",
+  "Ano": 1999,
+  "Status": "Disponível"
+}
+
+###
+PUT https://localhost:5001/api/filme/update
+Content-Type: application/json
+
+{
+  "Id": 1,
+  "Titulo": "Pinóquio",
+  "Duracao": 60,
+  "Diretor": "Walt Disney",
+  "Genero": "Animação",
+  "Ano": 1995,
+  "Status": "Disponível"
+}
+
+###
+GET https://localhost:5001/api/filme/list
+
+###
+GET https://localhost:5001/api/filme/getById/1
+
+###
+DELETE  https://localhost:5001/api/filme/delete/1
+
+# Usuário -----------------------------------------------------------
+
+###
+POST https://localhost:5001/api/usuario/create
+Content-Type: application/json
+
+{
+  "Nome": "Ana"
+}
+
+###
+PUT https://localhost:5001/api/usuario/update
+Content-Type: application/json
+
+{
+  "Id": 1,
+  "Nome": "Alice"
+}
+
+###
+GET https://localhost:5001/api/usuario/list
+
+# Locações -----------------------------------------------------------
+
+###
+POST https://localhost:5001/api/locacao/create
+Content-Type: application/json
+
+{
+  "FilmeId": 2,
+  "UsuarioId": 1
+}
+
+###
+PUT https://localhost:5001/api/locacao/update
+Content-Type: application/json
+
+{
+  "Id": 1,
+  "FilmeId": 2,
+  "UsuarioId": 1
+}
+
+###
+GET https://localhost:5001/api/locacao/list
+
+###
+GET https://localhost:5001/api/locacao/getById/1
+
+###
+DELETE  https://localhost:5001/api/locacao/delete/1
