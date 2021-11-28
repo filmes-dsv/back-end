@@ -30,6 +30,10 @@ namespace API.Controllers
         return Ok("Filme não encontrado");
       }
 
+      if (filme.Status == "Locado") {
+        return Ok("Filme não disponível");
+      }
+
       Usuario user = await _context.Usuarios.FindAsync(locacao.UsuarioId); 
       if (user == null) {
         return Ok("Usuário não encontrado");
@@ -40,6 +44,11 @@ namespace API.Controllers
         return Ok("Locação ja realizada pelo sistema");
       }
 
+      Filme movie = await _context.Filmes.FirstOrDefaultAsync(movie => movie.Id == filme.Id);
+      movie.Status = "Locado";
+      _context.Filmes.Update(movie);
+      await _context.SaveChangesAsync();
+
       await _context.Locacoes.AddAsync(locacao);
       await _context.SaveChangesAsync(); 
       return Created("", locacao);
@@ -47,10 +56,8 @@ namespace API.Controllers
 
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> ListAsync()
-    {
-      return Ok(await _context.Locacoes.ToListAsync());
-    }
+    public async Task<IActionResult> ListAsync() =>
+      Ok(await _context.Locacoes.Include(p => p.Filme).Include(p => p.Usuario).ToListAsync());
 
     //GET: getById
     [HttpGet]
@@ -68,6 +75,16 @@ namespace API.Controllers
     public async Task<IActionResult> DeleteAsync([FromRoute] int id)
     {
       Locacao locacao = await _context.Locacoes.FirstOrDefaultAsync(locacao => locacao.Id == id);
+      
+      Filme filme = await _context.Filmes.FindAsync(locacao.FilmeId); 
+      
+      if (filme.Status == "Locado") {
+        Filme movie = await _context.Filmes.FirstOrDefaultAsync(movie => movie.Id == filme.Id);
+        movie.Status = "Disponível";
+        _context.Filmes.Update(movie);
+        await _context.SaveChangesAsync();
+      }
+
       _context.Locacoes.Remove(locacao);
       await _context.SaveChangesAsync();
       return Ok(locacao);
